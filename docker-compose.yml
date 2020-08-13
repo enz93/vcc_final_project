@@ -2,7 +2,7 @@ version: "3"
 
 services:
     joomla:
-        image: joomla_img
+        image: enz93/joomla_img
         hostname: joomla
         environment:
          JUSERNAME: asd
@@ -13,7 +13,6 @@ services:
          DBPASS: joomla123
          DBPREFIX: prfx_
          LIVE_SITE: http:\/\/joomla.local # escaped per evitare errori
-         ##JOOMLAVERSION: 3.6.4
          JOOMLA_DB_HOST: db
          MYSQL_ROOT_PASSWORD: secret
         ports: 
@@ -39,7 +38,7 @@ services:
             - intnet   
         
     pmy:
-        image: pmy_img
+        image: enz93/pmy_img
         hostname: pmy
         depends_on: 
            - db
@@ -116,7 +115,6 @@ services:
             - '--path.sysfs=/host/sys'
             - '--collector.filesystem.ignored-mount-points'
             - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)
-
         ports:
             - '9100:9100'
         deploy:       
@@ -130,8 +128,6 @@ services:
         volumes: 
             - /GlusterFs/grafana:/var/lib/grafana
             - /GlusterFs/grafana/provisioning/:/etc/grafana/provisioning/
-        env_file:
-            - /GlusterFs/grafana/config.monitoring
         environment:
             - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
             - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
@@ -194,14 +190,10 @@ services:
 networks:
     intnet:
         internal: true
-        #driver: overlay
         ipam:
-            #driver: default
             config:
                 - subnet: 192.168.200.0/24
     extnet:
-        #driver: overlay
         ipam:
-            #driver: default
             config:
                 - subnet: 192.168.100.0/24
